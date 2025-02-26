@@ -1,12 +1,15 @@
 -- Carregar o script usando loadstring e game:HttpGet
 local function loadScript(url)
     local response = game:HttpGet(url)
+    if not response then
+        error("Failed to get response from URL: " .. url)
+    end
     local scriptFunction = loadstring(response)
     scriptFunction()
 end
 
 -- URL do script que você quer carregar
-local scriptUrl = "https://rawscripts.net/raw/SEASON-13!-Car-Dealership-Tycoon-CDT-Dearlship-20154"
+local scriptUrl = "https://raw.githubusercontent.com/erickzns/modmenu/refs/heads/main/modmenurb.lua"
 loadScript(scriptUrl)
 
 -- Criar o mod menu flutuante
@@ -48,25 +51,6 @@ local function createButton(text, position, parent)
     return button
 end
 
--- Botões laterais
-local buttons = {"Opção 1", "Opção 2", "Opção 3", "Configurações", "Sair"}
-for i, buttonText in ipairs(buttons) do
-    local button = createButton(buttonText, UDim2.new(0, 10, 0, 10 + (i - 1) * 60), Frame)
-    
-    -- Adicionar funcionalidade aos botões
-    button.MouseButton1Click:Connect(function()
-        if buttonText == "Sair" then
-            Frame.Visible = false
-        elseif buttonText == "Configurações" then
-            -- Exibir submenu de configurações
-            print("Abrir Configurações")
-        else
-            -- Exibir submenu da opção
-            print("Abrir " .. buttonText)
-        end
-    end)
-end
-
 -- Submenu de configurações (exemplo)
 local configFrame = Instance.new("Frame")
 configFrame.Size = UDim2.new(0, 200, 0, 300)
@@ -86,6 +70,25 @@ configLabel.Size = UDim2.new(0, 180, 0, 50)
 configLabel.Position = UDim2.new(0, 10, 0, 10)
 configLabel.Text = "Configuração 1"
 configLabel.Parent = configFrame
+
+-- Botões laterais
+local buttons = {"Opção 1", "Opção 2", "Opção 3", "Configurações", "Sair"}
+for i, buttonText in ipairs(buttons) do
+    local button = createButton(buttonText, UDim2.new(0, 10, 0, 10 + (i - 1) * 60), Frame)
+    
+    -- Adicionar funcionalidade aos botões
+    button.MouseButton1Click:Connect(function()
+        if buttonText == "Sair" then
+            Frame.Visible = false
+        elseif buttonText == "Configurações" then
+            -- Exibir submenu de configurações
+            configFrame.Visible = true
+        else
+            -- Exibir submenu da opção
+            print("Abrir " .. buttonText)
+        end
+    end)
+end
 
 -- Mostrar submenu de configurações ao clicar no botão de configurações
 Frame:FindFirstChild("Configurações").MouseButton1Click:Connect(function()
