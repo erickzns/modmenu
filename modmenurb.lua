@@ -1,52 +1,83 @@
--- Exemplo de como criar uma interface com Lua (usando CefLua para GTA V/FiveM)
+-- Criação da GUI do Mod Menu
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player.PlayerGui
+
+-- Criar o Menu (Frame principal)
+local modMenu = Instance.new("Frame")
+modMenu.Size = UDim2.new(0, 650, 0, 400)
+modMenu.Position = UDim2.new(0, 50, 0, 50)
+modMenu.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+modMenu.BackgroundTransparency = 0.9
+modMenu.Parent = screenGui
+
+-- Sidebar com as categorias
 local categories = {
-    {name = "Geral", icon = "menu", submenus = {"Dinheiro Infinito", "XP Boost", "Auto Collect"}},
-    {name = "Veículos", icon = "car", submenus = {"Velocidade Máxima", "No Collision", "Nitro Infinito"}},
-    {name = "Concessionária", icon = "users", submenus = {"Construção Instantânea", "Upgrade Grátis", "Auto Sell"}},
-    {name = "Eventos", icon = "zap", submenus = {"Pular Corridas", "Auto Win", "Spawn Veículos Especiais"}}
+    { name = "Geral", submenus = {"Dinheiro Infinito", "XP Boost", "Auto Collect"} },
+    { name = "Veículos", submenus = {"Velocidade Máxima", "No Collision", "Nitro Infinito"} },
+    { name = "Concessionária", submenus = {"Construção Instantânea", "Upgrade Grátis", "Auto Sell"} },
+    { name = "Eventos", submenus = {"Pular Corridas", "Auto Win", "Spawn Veículos Especiais"} },
 }
 
--- Variáveis para armazenar as opções de submenus
-local checkedOptions = {}
+-- Criação da sidebar (botões)
+local sidebar = Instance.new("Frame")
+sidebar.Size = UDim2.new(0, 60, 1, 0)
+sidebar.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+sidebar.Parent = modMenu
 
--- Função para alternar o estado do checkbox
-function toggleCheckbox(submenu)
-    if checkedOptions[submenu] then
-        checkedOptions[submenu] = false
-    else
-        checkedOptions[submenu] = true
+local buttons = {}
+for i, cat in ipairs(categories) do
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(1, 0, 0, 40)
+    button.Position = UDim2.new(0, 0, 0, (i-1) * 45)
+    button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    button.Text = cat.name
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Parent = sidebar
+    buttons[cat.name] = button
+end
+
+-- Área para os submenus
+local submenuFrame = Instance.new("Frame")
+submenuFrame.Size = UDim2.new(1, -60, 1, 0)
+submenuFrame.Position = UDim2.new(0, 60, 0, 0)
+submenuFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+submenuFrame.Parent = modMenu
+
+local submenuList = Instance.new("UIListLayout")
+submenuList.Parent = submenuFrame
+
+-- Função para mostrar os submenus
+local function showSubmenu(category)
+    -- Limpar os itens antigos
+    for _, child in ipairs(submenuFrame:GetChildren()) do
+        if child:IsA("TextButton") then
+            child:Destroy()
+        end
+    end
+
+    -- Criar os novos submenus
+    for _, submenu in ipairs(category.submenus) do
+        local submenuButton = Instance.new("TextButton")
+        submenuButton.Size = UDim2.new(1, 0, 0, 40)
+        submenuButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        submenuButton.Text = submenu
+        submenuButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        submenuButton.Parent = submenuFrame
     end
 end
 
--- Exemplo de função para desenhar o menu usando CefLua
-function drawMenu()
-    -- Criando a interface do menu em Lua, em HTML via CefLua
-    local htmlContent = "<div style='background-color: black; color: white; padding: 20px;'>"
-    
-    -- Sidebar com as categorias
-    htmlContent = htmlContent .. "<div style='float: left; width: 100px;'>"
-    for _, category in ipairs(categories) do
-        htmlContent = htmlContent .. string.format("<button style='width: 80px;'>%s</button><br>", category.icon)
+-- Exibir os submenus ao clicar nas categorias
+for catName, button in pairs(buttons) do
+    local category = nil
+    for _, cat in ipairs(categories) do
+        if cat.name == catName then
+            category = cat
+            break
+        end
     end
-    htmlContent = htmlContent .. "</div>"
-
-    -- Conteúdo da categoria selecionada
-    htmlContent = htmlContent .. "<div style='margin-left: 120px;'>"
-    local selectedCategory = categories[1] -- Categoria selecionada
-    htmlContent = htmlContent .. string.format("<h2>%s</h2>", selectedCategory.name)
-    for _, submenu in ipairs(selectedCategory.submenus) do
-        local checked = checkedOptions[submenu] and "checked" or ""
-        htmlContent = htmlContent .. string.format("<div><label><input type='checkbox' %s onchange='toggleCheckbox(\"%s\")'> %s</label></div>", checked, submenu, submenu)
-    end
-    htmlContent = htmlContent .. "</div>"
-
-    htmlContent = htmlContent .. "</div>"
     
-    -- Renderizando o HTML no navegador ou painel de CefLua
-    -- Exemplo fictício, o CefLua é configurado para renderizar HTML.
-    -- O código real depende do seu ambiente e do framework de GUI utilizado.
-    CefRender(htmlContent)
+    button.MouseButton1Click:Connect(function()
+        showSubmenu(category)
+    end)
 end
-
--- Chamar a função para desenhar o menu
-drawMenu()
