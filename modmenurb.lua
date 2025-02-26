@@ -1,6 +1,7 @@
 -- Cria a tela principal
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "ModMenu"
+screenGui.ResetOnSpawn = false
 screenGui.Parent = game.CoreGui
 
 -- Cria o frame principal do menu
@@ -8,6 +9,7 @@ local mainFrame = Instance.new("Frame")
 mainFrame.Size = UDim2.new(0, 300, 0, 400)
 mainFrame.Position = UDim2.new(0.5, -150, 0.5, -200)
 mainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+mainFrame.BorderSizePixel = 0
 mainFrame.Parent = screenGui
 
 -- Função para criar botões
@@ -18,6 +20,7 @@ local function createButton(text, parent, callback)
     button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
     button.Text = text
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.BorderSizePixel = 0
     button.Parent = parent
     button.MouseButton1Click:Connect(callback)
     return button
@@ -43,6 +46,7 @@ local submenuFrame = Instance.new("Frame")
 submenuFrame.Size = UDim2.new(1, -20, 0, 100)
 submenuFrame.Position = UDim2.new(0, 10, 0, 190)
 submenuFrame.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+submenuFrame.BorderSizePixel = 0
 submenuFrame.Visible = false
 submenuFrame.Parent = mainFrame
 
