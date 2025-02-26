@@ -26,40 +26,75 @@ local function createButton(text, parent, callback)
     return button
 end
 
--- Cria os botões laterais
-local button1 = createButton("Botão 1", mainFrame, function()
-    print("Botão 1 pressionado")
-end)
+-- Função para limpar o frame principal
+local function clearFrame(frame)
+    for _, child in ipairs(frame:GetChildren()) do
+        if child:IsA("TextButton") or child:IsA("Frame") then
+            child:Destroy()
+        end
+    end
+end
 
-local button2 = createButton("Botão 2", mainFrame, function()
-    print("Botão 2 pressionado")
-end)
-button2.Position = UDim2.new(0, 10, 0, 70)
+-- Função para criar o menu principal
+local function createMainMenu()
+    clearFrame(mainFrame)
+    
+    local button1 = createButton("Botão 1", mainFrame, function()
+        print("Botão 1 pressionado")
+    end)
 
-local button3 = createButton("Botão 3", mainFrame, function()
-    print("Botão 3 pressionado")
-end)
-button3.Position = UDim2.new(0, 10, 0, 130)
+    local button2 = createButton("Botão 2", mainFrame, function()
+        createSubMenu2()
+    end)
+    button2.Position = UDim2.new(0, 10, 0, 70)
 
--- Cria o submenu para o Botão 2
-local submenuFrame = Instance.new("Frame")
-submenuFrame.Size = UDim2.new(1, -20, 0, 100)
-submenuFrame.Position = UDim2.new(0, 10, 0, 190)
-submenuFrame.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-submenuFrame.BorderSizePixel = 0
-submenuFrame.Visible = false
-submenuFrame.Parent = mainFrame
+    local button3 = createButton("Botão 3", mainFrame, function()
+        createSubMenu3()
+    end)
+    button3.Position = UDim2.new(0, 10, 0, 130)
+end
 
-local submenuButton1 = createButton("Submenu Item 1", submenuFrame, function()
-    print("Submenu Item 1 pressionado")
-end)
+-- Função para criar o submenu 2
+local function createSubMenu2()
+    clearFrame(mainFrame)
+    
+    local submenuButton1 = createButton("Submenu 2 Item 1", mainFrame, function()
+        print("Submenu 2 Item 1 pressionado")
+        -- Adicione aqui a função desejada para o jogo
+    end)
 
-local submenuButton2 = createButton("Submenu Item 2", submenuFrame, function()
-    print("Submenu Item 2 pressionado")
-end)
-submenuButton2.Position = UDim2.new(0, 10, 0, 60)
+    local submenuButton2 = createButton("Submenu 2 Item 2", mainFrame, function()
+        print("Submenu 2 Item 2 pressionado")
+        -- Adicione aqui a função desejada para o jogo
+    end)
+    submenuButton2.Position = UDim2.new(0, 10, 0, 70)
 
--- Mostra/oculta o submenu quando o Botão 2 é pressionado
-button2.MouseButton1Click:Connect(function()
-    submenuFrame.Visible = not submenuFrame.Visible
-end)
+    local backButton = createButton("Voltar", mainFrame, function()
+        createMainMenu()
+    end)
+    backButton.Position = UDim2.new(0, 10, 0, 130)
+end
+
+-- Função para criar o submenu 3
+local function createSubMenu3()
+    clearFrame(mainFrame)
+    
+    local submenuButton1 = createButton("Submenu 3 Item 1", mainFrame, function()
+        print("Submenu 3 Item 1 pressionado")
+        -- Adicione aqui a função desejada para o jogo
+    end)
+
+    local submenuButton2 = createButton("Submenu 3 Item 2", mainFrame, function()
+        print("Submenu 3 Item 2 pressionado")
+        -- Adicione aqui a função desejada para o jogo
+    end)
+    submenuButton2.Position = UDim2.new(0, 10, 0, 70)
+
+    local backButton = createButton("Voltar", mainFrame, function()
+        createMainMenu()
+    end)
+    backButton.Position = UDim2.new(0, 10, 0, 130)
+end
+
+-- Inicializa o menu principal
+createMainMenu()
