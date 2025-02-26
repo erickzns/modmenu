@@ -1,5 +1,3 @@
--- Certifique-se de que este script está em um LocalScript dentro do StarterGui
-
 -- Definir categorias e submenus
 local categories = {
     { name = "Geral", submenus = {"Dinheiro Infinito", "XP Boost", "Auto Collect"} },
@@ -18,7 +16,7 @@ local function createModMenu()
     local SubmenuList = Instance.new("Frame")
     local UIListLayout = Instance.new("UIListLayout")
 
-    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    ScreenGui.Parent = game.CoreGui
     ScreenGui.Name = "ModMenu"
 
     MainFrame.Parent = ScreenGui
