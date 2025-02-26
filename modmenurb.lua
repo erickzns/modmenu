@@ -5,18 +5,19 @@ screenGui.Parent = player.PlayerGui
 
 -- Criar o Menu (Frame principal)
 local modMenu = Instance.new("Frame")
-modMenu.Size = UDim2.new(0, 650, 0, 400)
+modMenu.Size = UDim2.new(0, 500, 0, 300)  -- Menu menor
 modMenu.Position = UDim2.new(0, 50, 0, 50)
 modMenu.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-modMenu.BackgroundTransparency = 0.9
+modMenu.BackgroundTransparency = 0.5  -- Semitransparente
 modMenu.Parent = screenGui
+modMenu.ZIndex = 2  -- Assegura que o menu fique acima de outros objetos
 
 -- Sidebar com as categorias
 local categories = {
-    { name = "Geral", iconUrl = "https://www.example.com/menu-icon.png", submenus = {"Dinheiro Infinito", "XP Boost", "Auto Collect"} },
-    { name = "Veículos", iconUrl = "https://www.example.com/car-icon.png", submenus = {"Velocidade Máxima", "No Collision", "Nitro Infinito"} },
-    { name = "Concessionária", iconUrl = "https://www.example.com/users-icon.png", submenus = {"Construção Instantânea", "Upgrade Grátis", "Auto Sell"} },
-    { name = "Eventos", iconUrl = "https://www.example.com/zap-icon.png", submenus = {"Pular Corridas", "Auto Win", "Spawn Veículos Especiais"} },
+    { name = "Geral", iconUrl = "rbxassetid://123456789", submenus = {"Dinheiro Infinito", "XP Boost", "Auto Collect"} },
+    { name = "Veículos", iconUrl = "rbxassetid://987654321", submenus = {"Velocidade Máxima", "No Collision", "Nitro Infinito"} },
+    { name = "Concessionária", iconUrl = "rbxassetid://112233445", submenus = {"Construção Instantânea", "Upgrade Grátis", "Auto Sell"} },
+    { name = "Eventos", iconUrl = "rbxassetid://556677889", submenus = {"Pular Corridas", "Auto Win", "Spawn Veículos Especiais"} },
 }
 
 -- Criação da sidebar (botões)
@@ -31,8 +32,9 @@ for i, cat in ipairs(categories) do
     button.Size = UDim2.new(1, 0, 0, 40)
     button.Position = UDim2.new(0, 0, 0, (i-1) * 45)
     button.BackgroundTransparency = 1
-    button.Image = cat.iconUrl  -- Ícone da categoria
+    button.Image = cat.iconUrl  -- Usando os ícones da URL
     button.Parent = sidebar
+    button.ZIndex = 3  -- Garante que o botão seja clicável
     buttons[cat.name] = button
 end
 
