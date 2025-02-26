@@ -6,30 +6,42 @@ screenGui.Parent = game.CoreGui
 
 -- Cria o frame principal do menu
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 300, 0, 400)
-mainFrame.Position = UDim2.new(0.5, -150, 0.5, -200)
-mainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+mainFrame.Size = UDim2.new(0, 650, 0, 400)
+mainFrame.Position = UDim2.new(0, 20, 0, 100)
+mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+mainFrame.BackgroundTransparency = 0.1
 mainFrame.BorderSizePixel = 0
 mainFrame.Parent = screenGui
 
--- Cria um título para o menu
-local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(1, 0, 0, 50)
-titleLabel.Position = UDim2.new(0, 0, 0, 0)
-titleLabel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-titleLabel.BorderSizePixel = 0
-titleLabel.Text = "Mod Menu"
-titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleLabel.TextScaled = true
-titleLabel.Parent = mainFrame
+-- Cria a barra lateral
+local sidebar = Instance.new("Frame")
+sidebar.Size = UDim2.new(0, 80, 1, 0)
+sidebar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+sidebar.BorderSizePixel = 0
+sidebar.Parent = mainFrame
 
 -- Função para criar botões
 local function createButton(text, parent, callback)
     local button = Instance.new("TextButton")
     button.Size = UDim2.new(1, -20, 0, 50)
     button.Position = UDim2.new(0, 10, 0, 10)
-    button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
     button.Text = text
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.BorderSizePixel = 0
+    button.TextScaled = true
+    button.Parent = parent
+    button.MouseButton1Click:Connect(callback)
+    return button
+end
+
+-- Função para criar botões da barra lateral
+local function createSidebarButton(icon, parent, callback)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(1, -10, 0, 50)
+    button.Position = UDim2.new(0, 5, 0, 10)
+    button.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    button.Text = icon
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
     button.BorderSizePixel = 0
     button.TextScaled = true
@@ -54,17 +66,17 @@ local function createMainMenu()
     local button1 = createButton("Botão 1", mainFrame, function()
         print("Botão 1 pressionado")
     end)
-    button1.Position = UDim2.new(0, 10, 0, 60)
+    button1.Position = UDim2.new(0, 90, 0, 60)
 
     local button2 = createButton("Botão 2", mainFrame, function()
         createSubMenu2()
     end)
-    button2.Position = UDim2.new(0, 10, 0, 120)
+    button2.Position = UDim2.new(0, 90, 0, 120)
 
     local button3 = createButton("Botão 3", mainFrame, function()
         createSubMenu3()
     end)
-    button3.Position = UDim2.new(0, 10, 0, 180)
+    button3.Position = UDim2.new(0, 90, 0, 180)
 end
 
 -- Função para criar o submenu 2
@@ -75,18 +87,18 @@ local function createSubMenu2()
         print("Submenu 2 Item 1 pressionado")
         -- Adicione aqui a função desejada para o jogo
     end)
-    submenuButton1.Position = UDim2.new(0, 10, 0, 60)
+    submenuButton1.Position = UDim2.new(0, 90, 0, 60)
 
     local submenuButton2 = createButton("Submenu 2 Item 2", mainFrame, function()
         print("Submenu 2 Item 2 pressionado")
         -- Adicione aqui a função desejada para o jogo
     end)
-    submenuButton2.Position = UDim2.new(0, 10, 0, 120)
+    submenuButton2.Position = UDim2.new(0, 90, 0, 120)
 
     local backButton = createButton("Voltar", mainFrame, function()
         createMainMenu()
     end)
-    backButton.Position = UDim2.new(0, 10, 0, 180)
+    backButton.Position = UDim2.new(0, 90, 0, 180)
 end
 
 -- Função para criar o submenu 3
@@ -97,19 +109,35 @@ local function createSubMenu3()
         print("Submenu 3 Item 1 pressionado")
         -- Adicione aqui a função desejada para o jogo
     end)
-    submenuButton1.Position = UDim2.new(0, 10, 0, 60)
+    submenuButton1.Position = UDim2.new(0, 90, 0, 60)
 
     local submenuButton2 = createButton("Submenu 3 Item 2", mainFrame, function()
         print("Submenu 3 Item 2 pressionado")
         -- Adicione aqui a função desejada para o jogo
     end)
-    submenuButton2.Position = UDim2.new(0, 10, 0, 120)
+    submenuButton2.Position = UDim2.new(0, 90, 0, 120)
 
     local backButton = createButton("Voltar", mainFrame, function()
         createMainMenu()
     end)
-    backButton.Position = UDim2.new(0, 10, 0, 180)
+    backButton.Position = UDim2.new(0, 90, 0, 180)
 end
+
+-- Cria os botões da barra lateral
+local sidebarButton1 = createSidebarButton("G", sidebar, function()
+    createMainMenu()
+end)
+sidebarButton1.Position = UDim2.new(0, 5, 0, 10)
+
+local sidebarButton2 = createSidebarButton("V", sidebar, function()
+    createSubMenu2()
+end)
+sidebarButton2.Position = UDim2.new(0, 5, 0, 70)
+
+local sidebarButton3 = createSidebarButton("C", sidebar, function()
+    createSubMenu3()
+end)
+sidebarButton3.Position = UDim2.new(0, 5, 0, 130)
 
 -- Inicializa o menu principal
 createMainMenu()
