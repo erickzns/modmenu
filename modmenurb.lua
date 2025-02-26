@@ -114,7 +114,7 @@ local function createModMenu()
         end)
     end
 
-    updateSubmenuList(categories[0])
+    updateSubmenuList(categories[1])
 end
 
 createModMenu()
