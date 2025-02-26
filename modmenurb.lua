@@ -13,10 +13,10 @@ modMenu.Parent = screenGui
 
 -- Sidebar com as categorias
 local categories = {
-    { name = "Geral", submenus = {"Dinheiro Infinito", "XP Boost", "Auto Collect"} },
-    { name = "Veículos", submenus = {"Velocidade Máxima", "No Collision", "Nitro Infinito"} },
-    { name = "Concessionária", submenus = {"Construção Instantânea", "Upgrade Grátis", "Auto Sell"} },
-    { name = "Eventos", submenus = {"Pular Corridas", "Auto Win", "Spawn Veículos Especiais"} },
+    { name = "Geral", iconUrl = "https://www.example.com/menu-icon.png", submenus = {"Dinheiro Infinito", "XP Boost", "Auto Collect"} },
+    { name = "Veículos", iconUrl = "https://www.example.com/car-icon.png", submenus = {"Velocidade Máxima", "No Collision", "Nitro Infinito"} },
+    { name = "Concessionária", iconUrl = "https://www.example.com/users-icon.png", submenus = {"Construção Instantânea", "Upgrade Grátis", "Auto Sell"} },
+    { name = "Eventos", iconUrl = "https://www.example.com/zap-icon.png", submenus = {"Pular Corridas", "Auto Win", "Spawn Veículos Especiais"} },
 }
 
 -- Criação da sidebar (botões)
@@ -27,12 +27,11 @@ sidebar.Parent = modMenu
 
 local buttons = {}
 for i, cat in ipairs(categories) do
-    local button = Instance.new("TextButton")
+    local button = Instance.new("ImageButton")
     button.Size = UDim2.new(1, 0, 0, 40)
     button.Position = UDim2.new(0, 0, 0, (i-1) * 45)
-    button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    button.Text = cat.name
-    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.BackgroundTransparency = 1
+    button.Image = cat.iconUrl  -- Ícone da categoria
     button.Parent = sidebar
     buttons[cat.name] = button
 end
