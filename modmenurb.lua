@@ -1,96 +1,55 @@
--- Carregar o script usando loadstring e game:HttpGet
-local function loadScript(url)
-    local response = game:HttpGet(url)
-    if not response then
-        error("Failed to get response from URL: " .. url)
+-- Certifique-se de ter a biblioteca ImGui instalada e configurada
+local imgui = require('imgui')
+
+-- Função principal para desenhar o menu
+local function drawMenu()
+    -- Inicia uma nova janela
+    imgui.Begin("Mod Menu")
+
+    -- Botão lateral 1
+    if imgui.Button("Botão 1") then
+        -- Ação do Botão 1
+        print("Botão 1 pressionado")
     end
-    local scriptFunction = loadstring(response)
-    scriptFunction()
-end
 
--- URL do script que você quer carregar
-local scriptUrl = "https://raw.githubusercontent.com/erickzns/modmenu/refs/heads/main/modmenurb.lua"
-loadScript(scriptUrl)
+    -- Botão lateral 2 com submenu
+    if imgui.Button("Botão 2") then
+        -- Ação do Botão 2
+        print("Botão 2 pressionado")
+    end
 
--- Criar o mod menu flutuante
-local ScreenGui = Instance.new("ScreenGui")
-local Frame = Instance.new("Frame")
-local ToggleButton = Instance.new("TextButton")
-
--- Configurações do ScreenGui
-ScreenGui.Parent = game.CoreGui
-
--- Configurações do Frame
-Frame.Size = UDim2.new(0, 300, 0, 400)
-Frame.Position = UDim2.new(0.5, -150, 0.5, -200)
-Frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-Frame.Visible = true
-Frame.Parent = ScreenGui
-
--- Configurações do botão de alternância
-ToggleButton.Size = UDim2.new(0, 100, 0, 50)
-ToggleButton.Position = UDim2.new(0, 10, 0, 10)
-ToggleButton.Text = "Toggle Menu"
-ToggleButton.Parent = ScreenGui
-
--- Função para alternar a visibilidade do menu
-local function toggleMenu()
-    Frame.Visible = not Frame.Visible
-end
-
--- Conectar a função ao clique do botão
-ToggleButton.MouseButton1Click:Connect(toggleMenu)
-
--- Função para criar botões
-local function createButton(text, position, parent)
-    local button = Instance.new("TextButton")
-    button.Size = UDim2.new(0, 280, 0, 50)
-    button.Position = position
-    button.Text = text
-    button.Parent = parent
-    return button
-end
-
--- Submenu de configurações (exemplo)
-local configFrame = Instance.new("Frame")
-configFrame.Size = UDim2.new(0, 200, 0, 300)
-configFrame.Position = UDim2.new(1, 10, 0, 0)
-configFrame.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-configFrame.Visible = false
-configFrame.Parent = Frame
-
-local closeButton = createButton("Fechar", UDim2.new(0, 10, 0, 250), configFrame)
-closeButton.MouseButton1Click:Connect(function()
-    configFrame.Visible = false
-end)
-
--- Exemplo de configuração
-local configLabel = Instance.new("TextLabel")
-configLabel.Size = UDim2.new(0, 180, 0, 50)
-configLabel.Position = UDim2.new(0, 10, 0, 10)
-configLabel.Text = "Configuração 1"
-configLabel.Parent = configFrame
-
--- Botões laterais
-local buttons = {"Opção 1", "Opção 2", "Opção 3", "Configurações", "Sair"}
-for i, buttonText in ipairs(buttons) do
-    local button = createButton(buttonText, UDim2.new(0, 10, 0, 10 + (i - 1) * 60), Frame)
-    
-    -- Adicionar funcionalidade aos botões
-    button.MouseButton1Click:Connect(function()
-        if buttonText == "Sair" then
-            Frame.Visible = false
-        elseif buttonText == "Configurações" then
-            -- Exibir submenu de configurações
-            configFrame.Visible = true
-        else
-            -- Exibir submenu da opção
-            print("Abrir " .. buttonText)
+    -- Submenu para o Botão 2
+    if imgui.BeginMenu("Submenu do Botão 2") then
+        if imgui.MenuItem("Submenu Item 1") then
+            -- Ação do Submenu Item 1
+            print("Submenu Item 1 pressionado")
         end
-    end)
+        if imgui.MenuItem("Submenu Item 2") then
+            -- Ação do Submenu Item 2
+            print("Submenu Item 2 pressionado")
+        end
+        imgui.EndMenu()
+    end
+
+    -- Botão lateral 3
+    if imgui.Button("Botão 3") then
+        -- Ação do Botão 3
+        print("Botão 3 pressionado")
+    end
+
+    -- Finaliza a janela
+    imgui.End()
 end
 
--- Mostrar submenu de configurações ao clicar no botão de configurações
-Frame:FindFirstChild("Configurações").MouseButton1Click:Connect(function()
-    configFrame.Visible = true
-end)
+-- Função principal do script
+local function main()
+    -- Loop principal para desenhar o menu
+    while true do
+        imgui.NewFrame()
+        drawMenu()
+        imgui.Render()
+    end
+end
+
+-- Executa a função principal
+main()
