@@ -5,17 +5,17 @@ screenGui.Parent = player.PlayerGui
 
 -- Criar o Menu (Frame principal)
 local modMenu = Instance.new("Frame")
-modMenu.Size = UDim2.new(0, 450, 0, 300)  -- Menu com tamanho mais refinado
-modMenu.Position = UDim2.new(0.5, -225, 0.5, -150)  -- Centralizando o menu
-modMenu.BackgroundColor3 = Color3.fromRGB(30, 30, 30)  -- Cor de fundo mais suave
-modMenu.BackgroundTransparency = 0.9  -- Fundo semitransparente
-modMenu.BorderSizePixel = 0  -- Remover borda do menu
+modMenu.Size = UDim2.new(0, 500, 0, 350)  -- Menu com tamanho refinado
+modMenu.Position = UDim2.new(0.5, -250, 0.5, -175)  -- Centralizando o menu
+modMenu.BackgroundColor3 = Color3.fromRGB(24, 24, 24)  -- Cor de fundo mais neutra
+modMenu.BackgroundTransparency = 0.8  -- Fundo semitransparente
+modMenu.BorderSizePixel = 0  -- Sem borda
 modMenu.Parent = screenGui
-modMenu.ZIndex = 2  -- Assegura que o menu fique acima de outros objetos
+modMenu.ZIndex = 2  -- Menu acima de outros elementos
 
--- Sombras e bordas arredondadas
+-- Adicionando bordas arredondadas
 local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 12)  -- Bordas arredondadas
+UICorner.CornerRadius = UDim.new(0, 15)
 UICorner.Parent = modMenu
 
 -- Sidebar com as categorias
@@ -28,21 +28,21 @@ local categories = {
 
 -- Criação da sidebar (botões laterais)
 local sidebar = Instance.new("Frame")
-sidebar.Size = UDim2.new(0, 80, 1, 0)  -- Largura mais compacta para a sidebar
+sidebar.Size = UDim2.new(0, 70, 1, 0)  -- Sidebar mais compacta
 sidebar.Position = UDim2.new(0, 0, 0, 0)
-sidebar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+sidebar.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 sidebar.BorderSizePixel = 0
 sidebar.Parent = modMenu
 
--- Sombras e bordas arredondadas para a sidebar
+-- Adicionando bordas arredondadas para a sidebar
 local sidebarCorner = Instance.new("UICorner")
-sidebarCorner.CornerRadius = UDim.new(0, 12)
+sidebarCorner.CornerRadius = UDim.new(0, 15)
 sidebarCorner.Parent = sidebar
 
 local buttons = {}
 for i, cat in ipairs(categories) do
     local button = Instance.new("ImageButton")
-    button.Size = UDim2.new(1, 0, 0, 60)  -- Aumentar os botões para uma aparência mais moderna
+    button.Size = UDim2.new(1, 0, 0, 60)  -- Botões com altura mais proporcional
     button.Position = UDim2.new(0, 0, 0, (i-1) * 70)
     button.BackgroundTransparency = 1
     button.Image = cat.iconUrl  -- Usando os ícones da URL
@@ -50,14 +50,14 @@ for i, cat in ipairs(categories) do
     button.ZIndex = 3
     button.Name = cat.name
 
-    -- Efeito hover nos botões da sidebar
+    -- Efeito de hover nos botões da sidebar
     local buttonHover = Instance.new("UICorner")
     buttonHover.CornerRadius = UDim.new(0, 12)
     buttonHover.Parent = button
 
     -- Alterando a opacidade quando o mouse passa por cima
     button.MouseEnter:Connect(function()
-        button.ImageTransparency = 0.7
+        button.ImageTransparency = 0.5
     end)
 
     button.MouseLeave:Connect(function()
@@ -69,19 +69,19 @@ end
 
 -- Área para os submenus
 local submenuFrame = Instance.new("Frame")
-submenuFrame.Size = UDim2.new(1, -80, 1, 0)  -- Ajustando a largura para o submenu
-submenuFrame.Position = UDim2.new(0, 80, 0, 0)
-submenuFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+submenuFrame.Size = UDim2.new(1, -70, 1, 0)  -- Ajustando a largura para o submenu
+submenuFrame.Position = UDim2.new(0, 70, 0, 0)
+submenuFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 submenuFrame.BorderSizePixel = 0
 submenuFrame.Parent = modMenu
 
--- Sombras e bordas arredondadas para o submenu
+-- Bordas arredondadas para o submenu
 local submenuCorner = Instance.new("UICorner")
-submenuCorner.CornerRadius = UDim.new(0, 12)
+submenuCorner.CornerRadius = UDim.new(0, 15)
 submenuCorner.Parent = submenuFrame
 
 local submenuList = Instance.new("UIListLayout")
-submenuList.Padding = UDim.new(0, 10)
+submenuList.Padding = UDim.new(0, 12)  -- Espaçamento entre os itens do submenu
 submenuList.Parent = submenuFrame
 
 -- Função para mostrar os submenus
@@ -96,12 +96,12 @@ local function showSubmenu(category)
     -- Criar os novos submenus
     for _, submenu in ipairs(category.submenus) do
         local submenuButton = Instance.new("TextButton")
-        submenuButton.Size = UDim2.new(1, 0, 0, 50)
+        submenuButton.Size = UDim2.new(1, 0, 0, 50)  -- Ajuste da altura do submenu
         submenuButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
         submenuButton.Text = submenu
         submenuButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-        submenuButton.TextSize = 18
-        submenuButton.Font = Enum.Font.GothamBold
+        submenuButton.TextSize = 16
+        submenuButton.Font = Enum.Font.Gotham
         submenuButton.BorderSizePixel = 0
         submenuButton.TextTransparency = 0.2
         submenuButton.Parent = submenuFrame
