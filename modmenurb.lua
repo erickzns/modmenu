@@ -1,12 +1,11 @@
--- Carregar biblioteca de interface do usuário
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/erickzns/modmenu/refs/heads/main/modmenurb.lua"))()
+-- Certifique-se de que este script está em um LocalScript dentro do StarterGui
 
 -- Definir categorias e submenus
 local categories = {
-    { name = "Geral", icon = "rbxassetid://123456", submenus = {"Dinheiro Infinito", "XP Boost", "Auto Collect"} },
-    { name = "Veículos", icon = "rbxassetid://123457", submenus = {"Velocidade Máxima", "No Collision", "Nitro Infinito"} },
-    { name = "Concessionária", icon = "rbxassetid://123458", submenus = {"Construção Instantânea", "Upgrade Grátis", "Auto Sell"} },
-    { name = "Eventos", icon = "rbxassetid://123459", submenus = {"Pular Corridas", "Auto Win", "Spawn Veículos Especiais"} },
+    { name = "Geral", submenus = {"Dinheiro Infinito", "XP Boost", "Auto Collect"} },
+    { name = "Veículos", submenus = {"Velocidade Máxima", "No Collision", "Nitro Infinito"} },
+    { name = "Concessionária", submenus = {"Construção Instantânea", "Upgrade Grátis", "Auto Sell"} },
+    { name = "Eventos", submenus = {"Pular Corridas", "Auto Win", "Spawn Veículos Especiais"} },
 }
 
 -- Função para criar o menu
@@ -17,6 +16,7 @@ local function createModMenu()
     local ContentFrame = Instance.new("Frame")
     local CategoryTitle = Instance.new("TextLabel")
     local SubmenuList = Instance.new("Frame")
+    local UIListLayout = Instance.new("UIListLayout")
 
     ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
     ScreenGui.Name = "ModMenu"
@@ -49,6 +49,9 @@ local function createModMenu()
     SubmenuList.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     SubmenuList.Position = UDim2.new(0, 0, 0, 50)
     SubmenuList.Size = UDim2.new(1, 0, 1, -50)
+
+    UIListLayout.Parent = SubmenuList
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
     local function updateSubmenuList(category)
         CategoryTitle.Text = category.name
@@ -111,7 +114,7 @@ local function createModMenu()
         end)
     end
 
-    updateSubmenuList(categories[1])
+    updateSubmenuList(categories[0])
 end
 
 createModMenu()
