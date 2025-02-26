@@ -1,133 +1,111 @@
--- Criação da GUI do Mod Menu
 local player = game.Players.LocalPlayer
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = player.PlayerGui
 
--- Criar o Menu (Frame principal)
+-- Criação do Menu
 local modMenu = Instance.new("Frame")
-modMenu.Size = UDim2.new(0, 500, 0, 350)  -- Menu com tamanho refinado
-modMenu.Position = UDim2.new(0.5, -250, 0.5, -175)  -- Centralizando o menu
-modMenu.BackgroundColor3 = Color3.fromRGB(24, 24, 24)  -- Cor de fundo mais neutra
-modMenu.BackgroundTransparency = 0.8  -- Fundo semitransparente
-modMenu.BorderSizePixel = 0  -- Sem borda
+modMenu.Size = UDim2.new(0, 600, 0, 400)
+modMenu.Position = UDim2.new(0.5, -300, 0.5, -200)
+modMenu.BackgroundColor3 = Color3.fromRGB(30, 30, 30)  -- Fundo escuro
+modMenu.BackgroundTransparency = 0.9
+modMenu.BorderSizePixel = 0
 modMenu.Parent = screenGui
-modMenu.ZIndex = 2  -- Menu acima de outros elementos
 
--- Adicionando bordas arredondadas
 local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 15)
+UICorner.CornerRadius = UDim.new(0, 10)
 UICorner.Parent = modMenu
 
--- Sidebar com as categorias
+-- Barra de Títulos (Abas)
+local tabBar = Instance.new("Frame")
+tabBar.Size = UDim2.new(1, 0, 0, 40)
+tabBar.Position = UDim2.new(0, 0, 0, 0)
+tabBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+tabBar.BorderSizePixel = 0
+tabBar.Parent = modMenu
+
+local tabLayout = Instance.new("UIListLayout")
+tabLayout.FillDirection = Enum.FillDirection.Horizontal
+tabLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+tabLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+tabLayout.Parent = tabBar
+
 local categories = {
-    { name = "Geral", iconUrl = "rbxassetid://123456789", submenus = {"Dinheiro Infinito", "XP Boost", "Auto Collect"} },
-    { name = "Veículos", iconUrl = "rbxassetid://987654321", submenus = {"Velocidade Máxima", "No Collision", "Nitro Infinito"} },
-    { name = "Concessionária", iconUrl = "rbxassetid://112233445", submenus = {"Construção Instantânea", "Upgrade Grátis", "Auto Sell"} },
-    { name = "Eventos", iconUrl = "rbxassetid://556677889", submenus = {"Pular Corridas", "Auto Win", "Spawn Veículos Especiais"} },
+    { name = "Main", icon = "rbxassetid://123456789" },
+    { name = "Settings", icon = "rbxassetid://987654321" },
+    { name = "Misc", icon = "rbxassetid://112233445" },
 }
 
--- Criação da sidebar (botões laterais)
-local sidebar = Instance.new("Frame")
-sidebar.Size = UDim2.new(0, 70, 1, 0)  -- Sidebar mais compacta
-sidebar.Position = UDim2.new(0, 0, 0, 0)
-sidebar.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-sidebar.BorderSizePixel = 0
-sidebar.Parent = modMenu
-
--- Adicionando bordas arredondadas para a sidebar
-local sidebarCorner = Instance.new("UICorner")
-sidebarCorner.CornerRadius = UDim.new(0, 15)
-sidebarCorner.Parent = sidebar
-
-local buttons = {}
-for i, cat in ipairs(categories) do
-    local button = Instance.new("ImageButton")
-    button.Size = UDim2.new(1, 0, 0, 60)  -- Botões com altura mais proporcional
-    button.Position = UDim2.new(0, 0, 0, (i-1) * 70)
-    button.BackgroundTransparency = 1
-    button.Image = cat.iconUrl  -- Usando os ícones da URL
-    button.Parent = sidebar
-    button.ZIndex = 3
-    button.Name = cat.name
-
-    -- Efeito de hover nos botões da sidebar
-    local buttonHover = Instance.new("UICorner")
-    buttonHover.CornerRadius = UDim.new(0, 12)
-    buttonHover.Parent = button
-
-    -- Alterando a opacidade quando o mouse passa por cima
-    button.MouseEnter:Connect(function()
-        button.ImageTransparency = 0.5
-    end)
-
-    button.MouseLeave:Connect(function()
-        button.ImageTransparency = 0
-    end)
-
-    buttons[cat.name] = button
+local function createTabButton(name)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0, 100, 1, 0)
+    button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    button.Text = name
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.GothamBold
+    button.TextSize = 18
+    button.Parent = tabBar
+    return button
 end
 
--- Área para os submenus
-local submenuFrame = Instance.new("Frame")
-submenuFrame.Size = UDim2.new(1, -70, 1, 0)  -- Ajustando a largura para o submenu
-submenuFrame.Position = UDim2.new(0, 70, 0, 0)
-submenuFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-submenuFrame.BorderSizePixel = 0
-submenuFrame.Parent = modMenu
-
--- Bordas arredondadas para o submenu
-local submenuCorner = Instance.new("UICorner")
-submenuCorner.CornerRadius = UDim.new(0, 15)
-submenuCorner.Parent = submenuFrame
-
-local submenuList = Instance.new("UIListLayout")
-submenuList.Padding = UDim.new(0, 12)  -- Espaçamento entre os itens do submenu
-submenuList.Parent = submenuFrame
-
--- Função para mostrar os submenus
-local function showSubmenu(category)
-    -- Limpar os itens antigos
-    for _, child in ipairs(submenuFrame:GetChildren()) do
-        if child:IsA("TextButton") then
-            child:Destroy()
-        end
-    end
-
-    -- Criar os novos submenus
-    for _, submenu in ipairs(category.submenus) do
-        local submenuButton = Instance.new("TextButton")
-        submenuButton.Size = UDim2.new(1, 0, 0, 50)  -- Ajuste da altura do submenu
-        submenuButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-        submenuButton.Text = submenu
-        submenuButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-        submenuButton.TextSize = 16
-        submenuButton.Font = Enum.Font.Gotham
-        submenuButton.BorderSizePixel = 0
-        submenuButton.TextTransparency = 0.2
-        submenuButton.Parent = submenuFrame
-
-        -- Efeito de hover no submenu
-        submenuButton.MouseEnter:Connect(function()
-            submenuButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-        end)
-
-        submenuButton.MouseLeave:Connect(function()
-            submenuButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-        end)
-    end
-end
-
--- Exibir os submenus ao clicar nas categorias
-for catName, button in pairs(buttons) do
-    local category = nil
-    for _, cat in ipairs(categories) do
-        if cat.name == catName then
-            category = cat
-            break
-        end
-    end
-    
-    button.MouseButton1Click:Connect(function()
-        showSubmenu(category)
+for _, category in pairs(categories) do
+    local tabButton = createTabButton(category.name)
+    -- Ao clicar nas abas, vamos alterar o conteúdo
+    tabButton.MouseButton1Click:Connect(function()
+        -- Lógica para trocar o conteúdo exibido
+        print("Abrir conteúdo para " .. category.name)
     end)
 end
+
+-- Conteúdo principal (submenus)
+local contentFrame = Instance.new("Frame")
+contentFrame.Size = UDim2.new(1, 0, 1, -40)  -- Fica abaixo da barra de abas
+contentFrame.Position = UDim2.new(0, 0, 0, 40)
+contentFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+contentFrame.BorderSizePixel = 0
+contentFrame.Parent = modMenu
+
+local UICornerContent = Instance.new("UICorner")
+UICornerContent.CornerRadius = UDim.new(0, 10)
+UICornerContent.Parent = contentFrame
+
+local function createToggleOption(label, isChecked)
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(1, 0, 0, 40)
+    frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    frame.Parent = contentFrame
+
+    local UICornerToggle = Instance.new("UICorner")
+    UICornerToggle.CornerRadius = UDim.new(0, 10)
+    UICornerToggle.Parent = frame
+
+    local optionLabel = Instance.new("TextLabel")
+    optionLabel.Size = UDim2.new(0.7, 0, 1, 0)
+    optionLabel.Text = label
+    optionLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    optionLabel.Font = Enum.Font.Gotham
+    optionLabel.TextSize = 16
+    optionLabel.BackgroundTransparency = 1
+    optionLabel.Parent = frame
+
+    local toggleSwitch = Instance.new("TextButton")
+    toggleSwitch.Size = UDim2.new(0, 60, 0, 25)
+    toggleSwitch.Position = UDim2.new(0.8, 0, 0.5, -12)
+    toggleSwitch.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+    toggleSwitch.Text = isChecked and "ON" or "OFF"
+    toggleSwitch.TextColor3 = Color3.fromRGB(255, 255, 255)
+    toggleSwitch.Font = Enum.Font.GothamBold
+    toggleSwitch.TextSize = 14
+    toggleSwitch.Parent = frame
+
+    toggleSwitch.MouseButton1Click:Connect(function()
+        isChecked = not isChecked
+        toggleSwitch.Text = isChecked and "ON" or "OFF"
+        toggleSwitch.BackgroundColor3 = isChecked and Color3.fromRGB(255, 0, 0) or Color3.fromRGB(100, 100, 100)
+    end)
+end
+
+-- Exemplo de opções de menu
+createToggleOption("Auto Cast", false)
+createToggleOption("Auto Shake", true)
+createToggleOption("Instant Bobber", false)
+createToggleOption("Freeze Character", true)
