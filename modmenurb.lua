@@ -1,132 +1,66 @@
--- Mod Menu Flutuante - Roblox
--- By [SeuNome] - Aprendizado
+-- MOD MENU COM BOLINHA - VERSÃO CORRIGIDA
+repeat wait() until game:IsLoaded()
+wait(1)
 
 local player = game.Players.LocalPlayer
-local mouse = player:GetMouse()
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
+local playerGui = player:WaitForChild("PlayerGui")
 
--- GUI Elements
-local screenGui = script.Parent
-local mainFrame = screenGui:WaitForChild("MainFrame")
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "BolinhaMenu"
+screenGui.Parent = playerGui
 
--- Visibilidade
-mainFrame.Visible = false
+-- BOLINHA
+local ball = Instance.new("TextButton")
+ball.Text = ""
+ball.Size = UDim2.new(0, 60, 0, 60)
+ball.Position = UDim2.new(0, 20, 0, 100) -- Ajustado para aparecer melhor
+ball.BackgroundColor3 = Color3.fromRGB(0, 140, 255)
+ball.BorderSizePixel = 0
+ball.ZIndex = 2
+ball.Parent = screenGui
 
--- Botões
-local noClipBtn = mainFrame:WaitForChild("NoClipBtn")
-local flyBtn = mainFrame:WaitForChild("FlyBtn")
-local speedBtn = mainFrame:WaitForChild("SpeedBtn")
-local infJumpBtn = mainFrame:WaitForChild("InfiniteJumpBtn")
-local closeBtn = mainFrame:WaitForChild("CloseBtn")
+-- CANTOS ARREDONDADOS
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(1, 0)
+corner.Parent = ball
 
--- Estados
-local noClipEnabled = false
-local flyEnabled = false
-local speedEnabled = false
-local infJumpEnabled = false
-local speedValue = 16
+-- MENU
+local menu = Instance.new("Frame")
+menu.Size = UDim2.new(0, 200, 0, 200)
+menu.Position = UDim2.new(0, 90, 0, 100) -- Alinhado com a bolinha
+menu.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+menu.BorderSizePixel = 2
+menu.BorderColor3 = Color3.fromRGB(100, 100, 100)
+menu.Visible = false
+menu.ZIndex = 2
+menu.Parent = screenGui
 
--- Função: Toggle Menu
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-    if input.KeyCode == Enum.KeyCode.F3 then
-        mainFrame.Visible = not mainFrame.Visible
-    end
+-- TÍTULO
+local title = Instance.new("TextLabel")
+title.Text = "MOD MENU"
+title.Size = UDim2.new(1, 0, 0, 30)
+title.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.Gotham
+title.Parent = menu
+
+-- BOTÃO DE TESTE
+local godBtn = Instance.new("TextButton")
+godBtn.Text = "God Mode"
+godBtn.Size = UDim2.new(1, -10, 0, 30)
+godBtn.Position = UDim2.new(0, 5, 0, 40)
+godBtn.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+godBtn.TextColor3 = Color3.white
+godBtn.ZIndex = 2
+godBtn.Parent = menu
+
+godBtn.MouseButton1Click:Connect(function()
+    print("God Mode ativado!")
 end)
 
--- Botão: Fechar
-closeBtn.MouseButton1Click:Connect(function()
-    mainFrame.Visible = false
+-- ABRIR/FECHAR MENU
+ball.MouseButton1Click:Connect(function()
+    menu.Visible = not menu.Visible
 end)
 
--- NoClip
-noClipBtn.MouseButton1Click:Connect(function()
-    noClipEnabled = not noClipEnabled
-    noClipBtn.Text = "NoClip: " .. (noClipEnabled and "ON" or "OFF")
-    
-    if noClipEnabled then
-        RunService.Stepped:Connect(function()
-            if noClipEnabled and player.Character and player.Character:FindFirstChild("Humanoid") then
-                player.Character:FindFirstChild("Humanoid").PlatformStand = true
-                for _, part in pairs(player.Character:GetDescendants()) do
-                    if part:IsA("BasePart") then
-                        part.CanCollide = false
-                    end
-                end
-            end
-        end)
-    else
-        if player.Character and player.Character:FindFirstChild("Humanoid") then
-            player.Character:FindFirstChild("Humanoid").PlatformStand = false
-        end
-    end
-end)
-
--- Fly (exemplo simples com BodyVelocity)
-flyBtn.MouseButton1Click:Connect(function()
-    flyEnabled = not flyEnabled
-    flyBtn.Text = "Fly: " .. (flyEnabled and "ON" or "OFF")
-    
-    if flyEnabled then
-        spawn(function()
-            while flyEnabled do
-                if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                    local root = player.Character.HumanoidRootPart
-                    local bv = Instance.new("BodyVelocity")
-                    bv.MaxForce = Vector3.new(4000, 4000, 4000)
-                    bv.Velocity = root.CFrame.LookVector * 50
-                    bv.Parent = root
-                    
-                    wait(0.1)
-                    bv:Destroy()
-                end
-                wait()
-            end
-        end)
-    else
-        -- Parar o voo
-    end
-end)
-
--- Speed
-speedBtn.MouseButton1Click:Connect(function()
-    speedEnabled = not speedEnabled
-    speedBtn.Text = "Speed: " .. (speedEnabled and "ON" or "OFF")
-    
-    if speedEnabled then
-        spawn(function()
-            while speedEnabled do
-                if player.Character and player.Character:FindFirstChild("Humanoid") then
-                    player.Character.Humanoid.WalkSpeed = speedValue
-                end
-                wait(0.1)
-            end
-        end)
-    else
-        if player.Character and player.Character:FindFirstChild("Humanoid") then
-            player.Character.Humanoid.WalkSpeed = 16
-        end
-    end
-end)
-
--- Infinite Jump
-infJumpBtn.MouseButton1Click:Connect(function()
-    infJumpEnabled = not infJumpEnabled
-    infJumpBtn.Text = "InfJump: " .. (infJumpEnabled and "ON" or "OFF")
-    
-    if infJumpEnabled then
-        UserInputService.JumpRequest:Connect(function()
-            if player.Character and player.Character:FindFirstChild("Humanoid") then
-                player.Character:FindFirstChild("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping)
-            end
-        end)
-    end
-end)
-
--- Inicializar texto dos botões
-noClipBtn.Text = "NoClip: OFF"
-flyBtn.Text = "Fly: OFF"
-speedBtn.Text = "Speed: OFF"
-infJumpBtn.Text = "InfJump: OFF"
-closeBtn.Text = "Fechar [X]"
+print("✅ Menu carregado! Clique na bolinha azul.")
